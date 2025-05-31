@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bài 3 - Tính tiền thuế</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <link rel="stylesheet" href="./bai3.css">
+    <link rel="stylesheet" href="./bai3.js">
+</head>
+
+<body class="bg-blue-50 flex items-center justify-center min-h-screen">
+    <div class="max-w-lg mx-auto p-6">
+        <h2 class="text-xl font-bold text-green-700 flex items-center mb-4">
+            💰 Tính thuế thu nhập cá nhân
+        </h2>
+
+        <!-- Form nhập liệu (Căn trên cùng 1 hàng) -->
+        <div class="flex space-x-4">
+            <input type="text" id="name" placeholder="Nhập họ tên"
+                class="w-full min-w-[200px] p-3 rounded-xl bg-gray-100 border border-gray-300 focus:ring-2 focus:ring-blue-400 focus:outline-none">
+            <input type="number" id="income" placeholder="Tổng thu nhập năm"
+                class="w-full min-w-[200px] p-3 rounded-xl bg-gray-100 border border-gray-300 focus:ring-2 focus:ring-blue-400 focus:outline-none">
+            <input type="number" id="dependents" placeholder="Số người phụ thuộc"
+                class="w-full min-w-[200px] p-3 rounded-xl bg-gray-100 border border-gray-300 focus:ring-2 focus:ring-blue-400 focus:outline-none">
+        </div>
+
+        <!-- Button (Căn bên trái dưới input) -->
+        <div class="flex justify-start mt-4">
+            <button class="px-6 py-2 bg-blue-500 text-white font-semibold rounded-full shadow-md hover:bg-blue-600 transition" onclick="ketQua()">
+                Tính tiền thuế
+            </button>
+        </div>
+
+        <p id="result" class="mt-4 font-bold text-red-600"></p>
+
+        <script>
+            function ketQua() {
+                let thuNhapNam = parseFloat(document.getElementById("income").value) || 0;
+                let soNguoiPhuThuoc = parseInt(document.getElementById("dependents").value) || 0;
+
+                let giamTruBanThan = 132e+6;  // 132 triệu/năm
+                let giamTruNguoiPhuThuoc = 52.8e+6 * soNguoiPhuThuoc;  // 52.8 triệu/người/năm
+
+                let thuNhapChiuThue = thuNhapNam - giamTruBanThan - giamTruNguoiPhuThuoc;
+                if (thuNhapChiuThue <= 0) {
+                    document.getElementById("result").innerText = "Không phải nộp thuế!";
+                    return;
+                }
+
+                // Bậc thuế 
+                let bacThue = [60e+6, 120e+6, 216e+6, 384e+6, 624e+6, 960e+6]; 
+                let thueSuat = [0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35];
+
+                let thuePhaiTra = 0;
+                let thuNhapConLai = thuNhapChiuThue;
+
+                for (let i = 0; i < bacThue.length; i++) {
+                    if (thuNhapConLai > bacThue[i]) {
+                        thuePhaiTra += bacThue[i] * thueSuat[i];
+                        thuNhapConLai -= bacThue[i];
+                    } else {
+                        thuePhaiTra += thuNhapConLai * thueSuat[i];
+                        thuNhapConLai = 0;
+                        break;
+                    }
+                }
+
+                // Xử lý trường hợp thu nhập vượt 960 triệu (thuế suất 35%)
+                if (thuNhapConLai > 0) {
+                    thuePhaiTra += thuNhapConLai * thueSuat[thueSuat.length - 1];
+                }
+
+                document.getElementById("result").innerText = `Số tiền thuế phải nộp: ${new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(thuePhaiTra)}`;
+            }
+        </script>
+    </div>
+</body>
+</html>

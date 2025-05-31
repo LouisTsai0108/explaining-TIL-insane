@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bài 2 - Tính tiền điện</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <link rel="stylesheet" href="./bai2.css">
+    <link rel="stylesheet" href="./bai2.js">
+</head>
+
+<body class="bg-blue-50 flex items-center justify-center min-h-screen">
+    <div class="max-w-lg mx-auto p-6">
+        <h2 class="text-xl font-bold text-green-700 flex items-center mb-4">
+            🔋 Tính tiền điện
+        </h2>
+
+        <!-- Form nhập liệu (Căn trên cùng 1 hàng) -->
+        <div class="flex space-x-4">
+            <input type="text" id="name" placeholder="Nhập họ tên"
+                class="w-1/2 p-3 rounded-xl bg-gray-100 border border-gray-300 focus:ring-2 focus:ring-blue-400 focus:outline-none">
+            <input type="number" id="kw" placeholder="Nhập số kw"
+                class="w-1/2 p-3 rounded-xl bg-gray-100 border border-gray-300 focus:ring-2 focus:ring-blue-400 focus:outline-none">
+        </div>
+
+        <!-- Button (Căn bên trái dưới input) -->
+        <div class="flex justify-start mt-4">
+            <button class="px-6 py-2 bg-blue-500 text-white font-semibold rounded-full shadow-md hover:bg-blue-600 transition" onclick="ketQua()">
+                Tính tiền điện
+            </button>
+        </div>
+
+        <!-- Kết quả -->
+        <p id="result" class="text-lg font-semibold text-center mt-8 text-gray-700"></p>
+    </div>
+
+    <script>
+        function ketQua(){
+            let soKw = parseFloat(document.getElementById("kw").value); // Người dùng nhập vào giá trị
+            let result = 0;
+
+            if (soKw <= 50) { // 50kW đầu tiên
+                tongTien = soKw * 50;  
+            } else if (soKw <= 100) { // 50kW tiếp theo
+                tongTien = 50 * 50 + (soKw - 50) * 100;  
+            } else if (soKw <= 200) {
+                tongTien = 50 * 50 + 50 * 100 + (soKw - 100) * 200;
+            } else if (soKw <= 350) {
+                tongTien = 50 * 50 + 50 * 100 + 100 * 200 + (soKw - 200) * 350;
+            } else {
+                tongTien = 50 * 50 + 50 * 100 + 100 * 200 + 150 * 350 + (soKw - 350) * 500;
+            }
+
+            document.getElementById("result").innerText = `Tổng tiền điện: ${tongTien.toLocaleString()} VNĐ`;
+        }
+    </script>
+</body>
+</html>

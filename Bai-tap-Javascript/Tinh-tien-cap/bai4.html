@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bài 4 - Tính tiền cáp</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <link rel="stylesheet" href="./bai4.css">
+    <link rel="stylesheet" href="./bai4.js">
+</head>
+
+<body class="bg-blue-50 flex items-center justify-center min-h-screen p-4">
+    <div class="max-w-lg mx-auto p-6">
+        <h2 class="text-xl font-bold text-green-700 flex items-center mb-4">
+            🕸️ Tính tiền cáp
+        </h2>
+
+        <!-- Form nhập liệu (Căn trên cùng 1 hàng) -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 dropdown-container">
+            <select class="w-full p-3 rounded-xl bg-gray-100 border border-gray-300 focus:ring-2 focus:ring-blue-400 focus:outline-none" id="type" onchange="toggleConnection()">
+                <option value="0">Chọn loại khách hàng</option>
+                <option value="residence">Nhà Dân</option>
+                <option value="business">Doanh nghiệp</option>
+            </select>
+
+            <input type="text" id="customerid" placeholder="Nhập mã khách hàng"
+                class="w-full p-3 rounded-xl bg-gray-100 border border-gray-300 focus:ring-2 focus:ring-blue-400 focus:outline-none" />
+            <input type="number" id="channelid" placeholder="Số kênh cao cấp"
+                class="w-full p-3 rounded-xl bg-gray-100 border border-gray-300 focus:ring-2 focus:ring-blue-400 focus:outline-none" />
+            <input type="number" id="connectid" placeholder="Số kết nối"
+                class="w-full p-3 rounded-xl bg-gray-100 border border-gray-300 focus:ring-2 focus:ring-blue-400 focus:outline-none hidden" />
+        
+        </div>
+
+        <!-- Button (Căn bên trái dưới input) -->
+        <div class="flex justify-start mt-4">
+            <button class="w-full sm:w-auto px-6 py-2 bg-blue-500 text-white font-semibold rounded-full shadow-md hover:bg-blue-600 transition" onclick="ketQua()">
+                Tính tiền cáp
+            </button>
+        </div>
+
+        <div id="result" class="mt-4 p-4 bg-green-100 text-green-700 rounded-lg hidden"></div>
+
+        <script>
+        
+        
+        // Nhà Dân 1 kênh => 32.5, 2 kênh 40, 3 kênh 47.5
+        function ketQua() {
+            var type = document.getElementById("type").value;
+            var customerId = document.getElementById("customerid").value;
+            var channels = parseInt(document.getElementById("channelid").value) || 0;
+            var connections = parseInt(document.getElementById("connectid").value) || 0;
+            var totalCost = 0;
+            
+            if (type === "residence") {
+                totalCost = 25 + (7.5 * channels);
+            } else if (type === "business") {
+                totalCost = 75; // Chi phí cố định cho 10 kết nối đầu tiên
+                if (connections > 10) {
+                    totalCost += (connections - 10) * 5;
+                }
+                totalCost += 65 * channels;
+            }
+            
+            var resultDiv = document.getElementById("result");
+            resultDiv.innerHTML = `👉 Mã khách hàng: ${customerId}; Tiền cáp: $${totalCost.toFixed(2)}`;
+            resultDiv.classList.remove("hidden");
+        }
+    </script>
+        
+    </div>
+</body>
+</html>
